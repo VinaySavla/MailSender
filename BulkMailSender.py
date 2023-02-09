@@ -118,17 +118,19 @@ class Ui_MainWindow(object):
         self.toolButton_2.setStyleSheet(self.all_text_color_browse)
 
         self.label_5 = QtWidgets.QLabel(self.frame)
-        self.label_5.setGeometry(QtCore.QRect(80, 270, 231, 31))
+        self.label_5.setGeometry(QtCore.QRect(80, 210, 161, 31))
+        # self.label_5.setGeometry(QtCore.QRect(80, 270, 231, 31))
         self.label_5.setStyleSheet(self.all_text_color)
         self.label_5.setObjectName("label_5")
-        self.toolButton_3 = QtWidgets.QToolButton(self.frame)
-        self.toolButton_3.setGeometry(QtCore.QRect(330, 210, 61, 31))
-        self.toolButton_3.setObjectName("toolButton_3")
-        self.toolButton_3.clicked.connect(self.attachment_template_path)
-        self.toolButton_3.setStyleSheet(self.all_text_color_browse)
+        # self.toolButton_3 = QtWidgets.QToolButton(self.frame)
+        # self.toolButton_3.setGeometry(QtCore.QRect(330, 210, 61, 31))
+        # self.toolButton_3.setObjectName("toolButton_3")
+        # self.toolButton_3.clicked.connect(self.attachment_template_path)
+        # self.toolButton_3.setStyleSheet(self.all_text_color_browse)
 
         self.toolButton_4 = QtWidgets.QToolButton(self.frame)
-        self.toolButton_4.setGeometry(QtCore.QRect(330, 270, 61, 31))
+        self.toolButton_4.setGeometry(QtCore.QRect(330, 210, 61, 31))
+        # self.toolButton_4.setGeometry(QtCore.QRect(330, 270, 61, 31))
         self.toolButton_4.setObjectName("toolButton_4")
         self.toolButton_4.clicked.connect(self.body_template_path)
         self.toolButton_4.setStyleSheet(self.all_text_color_browse)
@@ -137,7 +139,7 @@ class Ui_MainWindow(object):
 
         self.toolButton_5 = QtWidgets.QToolButton(self.frame)
         self.toolButton_5.setGeometry(QtCore.QRect(330, 390, 61, 31))
-        self.toolButton_5.setObjectName("toolButton_4")
+        self.toolButton_5.setObjectName("toolButton_5")
         self.toolButton_5.clicked.connect(self.subject_template_path)
         self.toolButton_5.setStyleSheet(self.all_text_color_browse)
         
@@ -179,10 +181,10 @@ class Ui_MainWindow(object):
         self.label_3.setGeometry(QtCore.QRect(80, 330, 141, 31))
         self.label_3.setStyleSheet(self.all_text_color)
         self.label_3.setObjectName("label_3")
-        self.label_6 = QtWidgets.QLabel(self.frame)
-        self.label_6.setGeometry(QtCore.QRect(80, 210, 161, 31))
-        self.label_6.setStyleSheet(self.all_text_color)
-        self.label_6.setObjectName("label_6")
+        # self.label_6 = QtWidgets.QLabel(self.frame)
+        # self.label_6.setGeometry(QtCore.QRect(80, 210, 161, 31))
+        # self.label_6.setStyleSheet(self.all_text_color)
+        # self.label_6.setObjectName("label_6")
         self.verticalLayout.addWidget(self.frame)
         MainWindow.setCentralWidget(self.centralwidget)
         
@@ -201,7 +203,7 @@ class Ui_MainWindow(object):
         
         
         self.toolButton.setText(_translate("MainWindow", "Browse"))
-        self.toolButton_3.setText(_translate("MainWindow", "Browse"))
+        # self.toolButton_3.setText(_translate("MainWindow", "Browse"))
         self.toolButton_4.setText(_translate("MainWindow", "Browse"))
         self.toolButton_2.setText(_translate("MainWindow", "Browse"))
         self.toolButton_5.setText(_translate("MainWindow", "Browse"))
@@ -216,7 +218,7 @@ class Ui_MainWindow(object):
 
         self.label_7.setText(_translate("MainWindow", "Select Subject Template :"))
         self.label_3.setText(_translate("MainWindow", "Select File Name"))
-        self.label_6.setText(_translate("MainWindow", "Select Body Template :"))
+        # self.label_6.setText(_translate("MainWindow", "Select Body Template :"))
 
     def ChangeSettings(self):
         print("Changing Setting")
