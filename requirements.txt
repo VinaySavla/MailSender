@@ -1,0 +1,7 @@
+docx==0.2.4
+docx2pdf==0.1.8
+pandas==1.5.3
+pypandoc==1.10
+pypandoc_binary==1.10
+PyQt6==6.4.2
+python_docx==0.8.11
