@@ -2,6 +2,8 @@
 
 from importlib.resources import path
 from sys import path_hooks
+import pypandoc
+
 from PyQt6 import QtCore, QtGui, QtWidgets
 from PyQt6.QtWidgets import QFileDialog ,QLabel
 
@@ -238,13 +240,24 @@ class Ui_MainWindow(object):
         files, _ = QFileDialog.getOpenFileName(None, "Open File", "", "docx File (*.docx)")
         self.attachment_tem_file_path = str(files)
         print(self.attachment_tem_file_path)
+        output = pypandoc.convert_file(self.attachment_tem_file_path, 'html', outputfile="AttachmentTempalate.html")
+        assert output == ""
+        temp=""
+        temp="AttachmentTempalate.html"
+        # print(temp)
+        files = temp
+        self.body_tem_file_path = str(files)
+        print(self.body_tem_file_path)
 
+
+    # def attachment_template_path(self):
+    #     print("selecting mail body Template ")
+    #     files, _ = QFileDialog.getOpenFileName(None, "Open File", "", "HTML File (*.html)")
+    #     self.body_tem_file_path = str(files)
+    #     print(self.body_tem_file_path)
 
     def attachment_template_path(self):
         print("selecting mail body Template ")
-        files, _ = QFileDialog.getOpenFileName(None, "Open File", "", "HTML File (*.html)")
-        self.body_tem_file_path = str(files)
-        print(self.body_tem_file_path)
 
     def subject_template_path(self):
         print("selecting mail body Template ")
