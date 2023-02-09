@@ -69,7 +69,7 @@ class Ui_MainWindow(object):
         self.frame.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
         self.frame.setObjectName("frame")
         self.toolButton = QtWidgets.QToolButton(self.frame)
-        self.toolButton.setGeometry(QtCore.QRect(330, 110, 61, 31))
+        self.toolButton.setGeometry(QtCore.QRect(400, 110, 61, 31))
         self.toolButton.setObjectName("toolButton")
         self.toolButton.clicked.connect(self.exl_path)
         self.toolButton.setStyleSheet(self.all_text_color_browse)
@@ -79,7 +79,7 @@ class Ui_MainWindow(object):
         self.pushButton.setStyleSheet(self.button_color)
         self.pushButton.setObjectName("pushButton")
         self.label = QtWidgets.QLabel(self.frame)
-        self.label.setGeometry(QtCore.QRect(80, 110, 141, 31))
+        self.label.setGeometry(QtCore.QRect(80, 110, 310, 31))
         font = QtGui.QFont()
         font.setFamily("MS Shell Dlg 2")
         font.setPointSize(13)
@@ -92,7 +92,7 @@ class Ui_MainWindow(object):
         self.label.setObjectName("label")
         
         self.label_2 = QtWidgets.QLabel(self.frame)
-        self.label_2.setGeometry(QtCore.QRect(80, 160, 171, 31))
+        self.label_2.setGeometry(QtCore.QRect(80, 160, 310, 31))
         self.label_2.setStyleSheet(self.all_text_color)
         self.label_2.setObjectName("label_2")
         self.label_4 = QtWidgets.QLabel(self.frame)
@@ -112,13 +112,13 @@ class Ui_MainWindow(object):
         self.comboBox.setStyleSheet(self.all_text_color_browse)
 
         self.toolButton_2 = QtWidgets.QToolButton(self.frame)
-        self.toolButton_2.setGeometry(QtCore.QRect(330, 160, 61, 31))
+        self.toolButton_2.setGeometry(QtCore.QRect(400, 160, 61, 31))
         self.toolButton_2.setObjectName("toolButton_2")
         self.toolButton_2.clicked.connect(self.output_path)
         self.toolButton_2.setStyleSheet(self.all_text_color_browse)
 
         self.label_5 = QtWidgets.QLabel(self.frame)
-        self.label_5.setGeometry(QtCore.QRect(80, 210, 161, 31))
+        self.label_5.setGeometry(QtCore.QRect(80, 210, 310, 31))
         # self.label_5.setGeometry(QtCore.QRect(80, 270, 231, 31))
         self.label_5.setStyleSheet(self.all_text_color)
         self.label_5.setObjectName("label_5")
@@ -129,7 +129,7 @@ class Ui_MainWindow(object):
         # self.toolButton_3.setStyleSheet(self.all_text_color_browse)
 
         self.toolButton_4 = QtWidgets.QToolButton(self.frame)
-        self.toolButton_4.setGeometry(QtCore.QRect(330, 210, 61, 31))
+        self.toolButton_4.setGeometry(QtCore.QRect(400, 210, 61, 31))
         # self.toolButton_4.setGeometry(QtCore.QRect(330, 270, 61, 31))
         self.toolButton_4.setObjectName("toolButton_4")
         self.toolButton_4.clicked.connect(self.body_template_path)
@@ -138,7 +138,7 @@ class Ui_MainWindow(object):
 
 
         self.toolButton_5 = QtWidgets.QToolButton(self.frame)
-        self.toolButton_5.setGeometry(QtCore.QRect(330, 390, 61, 31))
+        self.toolButton_5.setGeometry(QtCore.QRect(400, 390, 61, 31))
         self.toolButton_5.setObjectName("toolButton_5")
         self.toolButton_5.clicked.connect(self.subject_template_path)
         self.toolButton_5.setStyleSheet(self.all_text_color_browse)
@@ -160,7 +160,7 @@ class Ui_MainWindow(object):
 
 
         self.label_7 = QtWidgets.QLabel(self.frame)
-        self.label_7.setGeometry(QtCore.QRect(80, 390, 180, 31))
+        self.label_7.setGeometry(QtCore.QRect(80, 390, 310, 31))
         self.label_7.setStyleSheet(self.all_text_color)
         self.label_7.setObjectName("label_7")
 
