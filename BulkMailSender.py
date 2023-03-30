@@ -439,39 +439,27 @@ class Ui_MainWindow(object):
         session.quit()
         print('Mail Sent')
 
-    def ch_var(self,path,col_val,row_val):
-        #start
+    def ch_var(self, path, col_val, row_val):
+    #start
         sample_page = path
 
-        dic={col_val[i]:row_val[i] for i in range(len(col_val)) }
-        # dic = {
-        #     '[NAME]':name,
-        #     '[POST]':position,
-        #     '[SALARY]' : salary,
-        # }
+        dic = {col_val[i]: row_val[i] for i in range(len(col_val))}
         print(dic)
 
         mail_all_body_text = self.mail_Body_message_formatted(self.body_tem_file_path)
         subject_text = self.mail_Body_message_formatted(self.subject_tem_file_path)
-        for p in sample_page.paragraphs:
-            inline = p.runs
-            for i in range(len(inline)):
-                text = inline[i].text
-                for key in dic.keys():
-                    if key in text:
-                        text=text.replace(key,dic[key])
-                        inline[i].text = text
+        for paragraph in sample_page.paragraphs:
+            for i in range(len(paragraph.runs)):
+                text = paragraph.runs[i].text
+                for key in dic:
+                    if str(key).upper() in str(text).upper():
+                        text = text.replace(key, dic[key])
+                        paragraph.runs[i].text = text
+                    mail_all_body_text = mail_all_body_text.replace(key, dic[key])
+                    print(key,", ", dic[key])
+                    subject_text = subject_text.replace(key, dic[key])
 
-
-                        mail_all_body_text = mail_all_body_text.replace(key,dic[key])
-                        subject_text = subject_text.replace(key,dic[key])
-                        
-                        
-                        # print("abc")
-        
-
-        
-        return sample_page,mail_all_body_text,subject_text
+        return sample_page, mail_all_body_text, subject_text
     #end       
 
 
