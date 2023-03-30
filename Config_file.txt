@@ -10,4 +10,4 @@ wait_time_in_sec=3
 SMTP_host=smtp.office365.com
 smtp_port=587
 Main_Window_title=SC LEGAL
-Icon_path=sc_t.png
+Icon_path=sc.png

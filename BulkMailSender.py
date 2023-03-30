@@ -24,6 +24,7 @@ import os
 import time
 from email.header import Header
 from email.utils import formataddr
+from pypandoc.pandoc_download import download_pandoc
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow,btn_val,gb_val,title_name,mail_subject,mail_body,all_text_color,send_button_text_color,wait_time,main_window_title,main_icon):
@@ -137,12 +138,12 @@ class Ui_MainWindow(object):
 
 
 
-        self.toolButton_5 = QtWidgets.QToolButton(self.frame)
-        self.toolButton_5.setGeometry(QtCore.QRect(400, 270, 61, 31))
-        # self.toolButton_5.setGeometry(QtCore.QRect(400, 390, 61, 31))
-        self.toolButton_5.setObjectName("toolButton_5")
-        self.toolButton_5.clicked.connect(self.subject_template_path)
-        self.toolButton_5.setStyleSheet(self.all_text_color_browse)
+        # self.toolButton_5 = QtWidgets.QToolButton(self.frame)
+        # # self.toolButton_5.setGeometry(QtCore.QRect(400, 270, 61, 31))
+        # # self.toolButton_5.setGeometry(QtCore.QRect(400, 390, 61, 31))
+        # self.toolButton_5.setObjectName("toolButton_5")
+        # self.toolButton_5.clicked.connect(self.subject_template_path)
+        # self.toolButton_5.setStyleSheet(self.all_text_color_browse)
         
 
         self.pushButton_2 = QtWidgets.QPushButton(self.frame)
@@ -189,6 +190,13 @@ class Ui_MainWindow(object):
         # self.label_6.setObjectName("label_6")
         self.verticalLayout.addWidget(self.frame)
         MainWindow.setCentralWidget(self.centralwidget)
+
+        #Subject Line
+        self.lineEdit = QtWidgets.QLineEdit(self.frame)
+        self.lineEdit.setGeometry(QtCore.QRect(330, 270, 171, 31))
+        self.lineEdit.setStyleSheet(self.all_text_color_browse)
+        self.lineEdit.setObjectName("lineEdit")
+        self.lineEdit.setText("Mail From SC Legal")
         
 
         self.retranslateUi(MainWindow)
@@ -208,7 +216,7 @@ class Ui_MainWindow(object):
         # self.toolButton_3.setText(_translate("MainWindow", "Browse"))
         self.toolButton_4.setText(_translate("MainWindow", "Browse"))
         self.toolButton_2.setText(_translate("MainWindow", "Browse"))
-        self.toolButton_5.setText(_translate("MainWindow", "Browse"))
+        # self.toolButton_5.setText(_translate("MainWindow", "Browse"))
 
         self.pushButton.setText(_translate("MainWindow", "Send"))
         self.pushButton.clicked.connect(self.Send_button)
@@ -218,7 +226,7 @@ class Ui_MainWindow(object):
         # self.label_4.setText(_translate("MainWindow", "Email Notification Sender"))
         self.label_5.setText(_translate("MainWindow", "Select Attachment Template"))
 
-        self.label_7.setText(_translate("MainWindow", "Select Subject Template :"))
+        self.label_7.setText(_translate("MainWindow", "Mail Subject"))
         self.label_3.setText(_translate("MainWindow", "Select File Name"))
         # self.label_6.setText(_translate("MainWindow", "Select Body Template :"))
 
@@ -516,6 +524,10 @@ class Ui_MainWindow(object):
         if self.attachment_tem_file_path==None:
             self.Pop_up_message("Please Select Attachment Template")
             return
+        with open("subject.html", "w") as file:
+            file.write(self.lineEdit.text())
+        file.close()
+        self.subject_tem_file_path="subject.html"
         
         if self.subject_tem_file_path==None:
             self.Pop_up_message("Please Select subject Template")
@@ -640,6 +652,14 @@ class Ui_MainWindow(object):
 
 if __name__ == "__main__":
     import sys
+    filename = "pandoc-3.1.2-windows-x86_64.msi"
+    filepath = os.path.join(os.path.dirname(os.path.abspath(__file__)), filename)
+
+    if os.path.exists(filepath):
+        print(f"The file {filename} exists in the base location of the code.")
+    else:
+        # print(f"The file {filename} does not exist in the base location of the code.")
+        download_pandoc(version='3.1.2')
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
     ui = Ui_MainWindow()
