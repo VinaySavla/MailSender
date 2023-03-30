@@ -296,6 +296,7 @@ class Ui_MainWindow(object):
         data = pd.read_excel(self.exl_file_path)
         
         all_columns = data.columns
+        self.allColumns = all_columns
         self.comboBox.setCurrentText("")
         # self.lineEdit.setCurrentText
         for val in all_columns:
@@ -456,8 +457,8 @@ class Ui_MainWindow(object):
                         text = text.replace(key, dic[key])
                         paragraph.runs[i].text = text
                     mail_all_body_text = mail_all_body_text.replace(key, dic[key])
-                    print(key,", ", dic[key])
                     subject_text = subject_text.replace(key, dic[key])
+                    # print(key,", ", dic[key])
 
         return sample_page, mail_all_body_text, subject_text
     #end       
@@ -531,9 +532,9 @@ class Ui_MainWindow(object):
                 print(name)
             email=""
             for i in col_value:
-                if i=='Email' or i=='email' or i=='EMAIL':
+                if i=='Email' or i=='email' or i=='EMAIL' or str(i).upper() == "EMAIL":
                     email=i
-                    # print(email+"##"")
+                    # print(email+"##")
         else:
             print("Please Select Excel file first.")
             return
@@ -610,7 +611,9 @@ class Ui_MainWindow(object):
                 path1=Document(self.attachment_tem_file_path)
                 z,mail_msg,subject_msg = self.ch_var(path1,col_value,row_value)
 
-                
+                if 'REGION' in [col.upper() for col in self.allColumns]:
+                    print("Region Present")
+                    #TODO add region in output folder
                 # name = "output\\"+name
                 z.save(self.output_folder_path+"//"+fn+"_"+str(i+2)+'.docx')
                 filename = self.output_folder_path+"//"+fn+"_"+str(i+2)+".pdf"
@@ -622,7 +625,7 @@ class Ui_MainWindow(object):
                 print("Mail sent: "+user_name)        
                 print("waiting "+self.wait_time +" seconds")
                 time.sleep(int(self.wait_time))
-                print("cycle completed.************************")
+                print("************************ Cycle Completed.************************")
 
             except Exception as e:
                 print(e)
