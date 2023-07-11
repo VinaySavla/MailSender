@@ -5,3 +5,5 @@ pypandoc==1.10
 pypandoc_binary==1.10
 PyQt6==6.4.2
 python_docx==0.8.11
+openpyxl==3.1.2
+pypdf2==3.0.1

@@ -25,6 +25,7 @@ import time
 from email.header import Header
 from email.utils import formataddr
 from pypandoc.pandoc_download import download_pandoc
+from PyPDF2 import PdfMerger
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow,btn_val,gb_val,title_name,mail_subject,mail_body,all_text_color,send_button_text_color,wait_time,main_window_title,main_icon):
@@ -249,10 +250,10 @@ class Ui_MainWindow(object):
 
     def body_template_path(self):
         print("selecting mail attachment file")
-        files, _ = QFileDialog.getOpenFileName(None, "Open File", "", "docx File (*.docx)")
+        files, _ = QFileDialog.getOpenFileName(None, "Open File", "", "Microsoft Word Documents (*.docx)")
         self.attachment_tem_file_path = str(files)
         print(self.attachment_tem_file_path)
-        output = pypandoc.convert_file(self.attachment_tem_file_path, 'html', outputfile="AttachmentTempalate.html")
+        output = pypandoc.convert_file(self.attachment_tem_file_path, 'html', outputfile="AttachmentTempalate.html", encoding="utf-8")
         assert output == ""
         temp=""
         temp="AttachmentTempalate.html"
@@ -281,7 +282,7 @@ class Ui_MainWindow(object):
 
     def exl_path(self):
         print("Exl path Button")
-        files, _ = QFileDialog.getOpenFileName(None, "Open File", "", "PDF File (*.xlsx)")
+        files, _ = QFileDialog.getOpenFileName(None, "Open File", "", "Excel File (*.xlsx)")
         self.exl_file_path = str(files)
         value = self.comboBox.currentText()
         print(value)
@@ -495,7 +496,9 @@ class Ui_MainWindow(object):
         msg.setText(msg_text)
         x = msg.exec()  # this will show our messagebox
         
+    regionList = []
     def Send_button(self):
+        
 
         if self.exl_file_path==None:
             self.Pop_up_message("Please Select Excel File")
@@ -611,36 +614,85 @@ class Ui_MainWindow(object):
                 path1=Document(self.attachment_tem_file_path)
                 z,mail_msg,subject_msg = self.ch_var(path1,col_value,row_value)
 
-                if 'REGION' in [col.upper() for col in self.allColumns]:
-                    print("Region Present")
-                    #TODO add region in output folder
+                # if 'REGION' in [col.upper() for col in self.allColumns]:
+                #     print("Region Present")
+                region = ''
+                for col in self.allColumns:
+                    if col.upper() == 'CITY':
+                        region = data[col][i]
+                        # print("Region Present",region)
+                        self.regionList.append(region)
+                        
                 # name = "output\\"+name
-                z.save(self.output_folder_path+"//"+fn+"_"+str(i+2)+'.docx')
-                filename = self.output_folder_path+"//"+fn+"_"+str(i+2)+".pdf"
-                convert(self.output_folder_path+"//"+fn+"_"+str(i+2)+".docx", filename)
-                print("pdf generation done")
+                if region == '':
+                    z.save(self.output_folder_path+"//"+fn+"_"+str(i+2)+'.docx')
+                    filename = self.output_folder_path+"//"+fn+"_"+str(i+2)+".pdf"
+                    convert(self.output_folder_path+"//"+fn+"_"+str(i+2)+".docx", filename)
+                    print("pdf generation done")
+                else:
+                    if not os.path.exists(self.output_folder_path+"/"+region):
+                        os.makedirs(self.output_folder_path+"/"+region)
+                    z.save(self.output_folder_path+"/"+region+"//"+fn+"_"+str(i+2)+'.docx')
+                    filename = self.output_folder_path+"/"+region+"//"+fn+"_"+str(i+2)+".pdf"
+                    convert(self.output_folder_path+"/"+region+"//"+fn+"_"+str(i+2)+".docx", filename)
+                    print("pdf generation done")
+                    
+                # z.save(self.output_folder_path+"//"+fn+"_"+str(i+2)+'.docx')
+                # filename = self.output_folder_path+"//"+fn+"_"+str(i+2)+".pdf"
+                # convert(self.output_folder_path+"//"+fn+"_"+str(i+2)+".docx", filename)
+                # print("pdf generation done")
 
-                self.sendMail_new(filename,send_to,self.body_tem_file_path,mail_msg,subject_msg)
+                # self.sendMail_new(filename,send_to,self.body_tem_file_path,mail_msg,subject_msg)
 
-                print("Mail sent: "+user_name)        
+                print("Mail sent: "+email)        
                 print("waiting "+self.wait_time +" seconds")
                 time.sleep(int(self.wait_time))
+                email = ''
                 print("************************ Cycle Completed.************************")
 
             except Exception as e:
                 print(e)
 
+        self.regionList = list(dict.fromkeys(self.regionList))
+        for region in self.regionList:
+            folder = self.output_folder_path+"/"+region
+            merge_pdfs_in_directory(folder,region)
         #all variables reset
         self.exl_file_path = None
         self.output_folder_path = None
         self.body_tem_file_path = None
         self.attachment_tem_file_path = None
         self.subject_tem_file_path=None
+        self.regionList.clear()
         self.comboBox.clear()
 
         print("Process completed.")
 
+def merge_pdfs_in_directory(directory, region):
+    merger = PdfMerger()
 
+    # Get a list of all PDF files in the directory
+    pdf_files = [f for f in os.listdir(directory) if f.endswith('.pdf')]
+
+    # Sort the files alphabetically (optional)
+    # pdf_files.sort()
+
+    # Merge the PDF files
+    for pdf_file in pdf_files:
+        file_path = os.path.join(directory, pdf_file)
+        merger.append(file_path)
+
+    # Save the merged PDF file
+    # print(region)
+    outputPdfName = f'{region}.pdf'
+    # print(outputPdfName)
+    merged_file_path = os.path.join(directory, outputPdfName)
+    merger.write(merged_file_path)
+    merger.close()
+
+    print(f'PDF files for region {region} merged successfully.')
+    
+    
 if __name__ == "__main__":
     import sys
     filename = "pandoc-3.1.2-windows-x86_64.msi"
