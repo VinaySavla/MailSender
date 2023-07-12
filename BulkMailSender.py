@@ -26,6 +26,7 @@ from email.header import Header
 from email.utils import formataddr
 from pypandoc.pandoc_download import download_pandoc
 from PyPDF2 import PdfMerger
+import zipfile
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow,btn_val,gb_val,title_name,mail_subject,mail_body,all_text_color,send_button_text_color,wait_time,main_window_title,main_icon):
@@ -253,6 +254,12 @@ class Ui_MainWindow(object):
         files, _ = QFileDialog.getOpenFileName(None, "Open File", "", "Microsoft Word Documents (*.docx)")
         self.attachment_tem_file_path = str(files)
         print(self.attachment_tem_file_path)
+        archive = zipfile.ZipFile(self.attachment_tem_file_path)
+        for file in archive.filelist:
+            print("inside file")
+            if file.filename.startswith('word/media/'):
+                print("inside file condition found")
+                archive.extract(file)
         output = pypandoc.convert_file(self.attachment_tem_file_path, 'html', outputfile="AttachmentTempalate.html", encoding="utf-8")
         assert output == ""
         temp=""
