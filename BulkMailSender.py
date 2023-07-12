@@ -27,6 +27,8 @@ from email.utils import formataddr
 from pypandoc.pandoc_download import download_pandoc
 from PyPDF2 import PdfMerger
 import zipfile
+from bs4 import BeautifulSoup
+import re
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow,btn_val,gb_val,title_name,mail_subject,mail_body,all_text_color,send_button_text_color,wait_time,main_window_title,main_icon):
@@ -248,7 +250,29 @@ class Ui_MainWindow(object):
             self.Pop_up_message("System Not Suported")
             
     
+    def change_image_locations(self, html_file, new_folder_name):
 
+        # Read the HTML file
+        with open(html_file, 'r') as file:
+            html_data = file.read()
+
+        # Parse the HTML using BeautifulSoup
+        soup = BeautifulSoup(html_data, 'html.parser')
+
+        # Find all image tags in the HTML
+        images = soup.find_all('img')
+
+        # Iterate over the image tags and update the src attribute
+        for image in images:
+            src = image['src']
+            # Add the folder name before the existing path
+            new_src = new_folder_name + '/' + src
+            image['src'] = new_src
+
+        # Save the modified HTML
+        with open(html_file, 'w') as file:
+            file.write(str(soup))
+            
     def body_template_path(self):
         print("selecting mail attachment file")
         files, _ = QFileDialog.getOpenFileName(None, "Open File", "", "Microsoft Word Documents (*.docx)")
@@ -256,9 +280,9 @@ class Ui_MainWindow(object):
         print(self.attachment_tem_file_path)
         archive = zipfile.ZipFile(self.attachment_tem_file_path)
         for file in archive.filelist:
-            print("inside file")
+            # print("inside file")
             if file.filename.startswith('word/media/'):
-                print("inside file condition found")
+                # print("inside file condition found")
                 archive.extract(file)
         output = pypandoc.convert_file(self.attachment_tem_file_path, 'html', outputfile="AttachmentTempalate.html", encoding="utf-8")
         assert output == ""
@@ -267,6 +291,7 @@ class Ui_MainWindow(object):
         # print(temp)
         files = temp
         self.body_tem_file_path = str(files)
+        self.change_image_locations(self.body_tem_file_path,'word')
         print(self.body_tem_file_path)
 
 
