@@ -17,6 +17,8 @@ from email.message import EmailMessage
 
 from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
+from email.mime.image import MIMEImage
+from email.mime.multipart import MIMEMultipart
 
 from PyQt6.QtWidgets import QMessageBox
 from email import encoders
@@ -399,8 +401,20 @@ class Ui_MainWindow(object):
 
         with open(pdf_file_to_send, 'rb') as pdf:
             msg.add_attachment(pdf.read(), maintype='application', subtype='octet-stream', filename=pdfname)
+        #TODO images to be visible in mail
+        folder_path = 'word\media'
+        images = os.listdir(folder_path)
 
+        # Attach all the images to the mail.
+        for image in images:
+            if image.endswith(".jpg") or image.endswith(".jpeg") or image.endswith(".png"):
+                with open(os.path.join(folder_path, image), "rb") as f:
+                    attachment = MIMEImage(f.read())
+                    attachment.add_header('Content-ID', '<%s>' %(image))
+                    attachment.add_header("Content-Disposition", "inline", filename=image)
+                    msg.attach(attachment)
 
+        #TODO ENDS
 
         with smtplib.SMTP(smtp_host, smtp_port) as smtp:
             smtp.starttls()
@@ -679,7 +693,7 @@ class Ui_MainWindow(object):
                 # convert(self.output_folder_path+"//"+fn+"_"+str(i+2)+".docx", filename)
                 # print("pdf generation done")
 
-                # self.sendMail_new(filename,send_to,self.body_tem_file_path,mail_msg,subject_msg)
+                self.sendMail_new(filename,send_to,self.body_tem_file_path,mail_msg,subject_msg)
 
                 print("Mail sent: "+email)        
                 print("waiting "+self.wait_time +" seconds")
