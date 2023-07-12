@@ -266,7 +266,12 @@ class Ui_MainWindow(object):
         for image in images:
             src = image['src']
             # Add the folder name before the existing path
-            new_src = new_folder_name + '/' + src
+            # new_src = new_folder_name + '/' + src
+            last_slash_index = src.rfind("/")
+            if last_slash_index == -1:
+                new_src = src
+            else:
+                new_src = "cid:"+ src[last_slash_index + 1:]
             image['src'] = new_src
 
         # Save the modified HTML
