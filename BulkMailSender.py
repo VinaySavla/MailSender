@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import copy
 from importlib.resources import path
 from sys import path_hooks
 import pypandoc
@@ -31,6 +32,8 @@ from PyPDF2 import PdfMerger
 import zipfile
 from bs4 import BeautifulSoup
 import re
+from docx.oxml.ns import nsdecls
+from docx.oxml import parse_xml
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow,btn_val,gb_val,title_name,mail_subject,mail_body,all_text_color,send_button_text_color,wait_time,main_window_title,main_icon):
@@ -251,12 +254,41 @@ class Ui_MainWindow(object):
         else:
             self.Pop_up_message("System Not Suported")
             
+    def replace_curly_single_quote(self,word_file):
+    # Load the Word document
+        doc = Document(word_file)
+
+        # Create a new document for the modified content
+        modified_doc = Document()
+
+        # Iterate over paragraphs and runs to replace the curly single quote
+        for element in doc.element.body:
+            if element.tag.endswith(('p', 'tbl')):
+                new_element = copy.deepcopy(element)
+                modified_doc.element.body.append(new_element)
+                for run in new_element.iter('w:r'):
+                    for text in run.iter('w:t'):
+                    # Replace curly single quote with regular single quote
+                        text.text = re.sub(r'’', "'", text.text)
+                        text.text = re.sub(r'‘', "'", text.text)
+                        text.text = re.sub(r'“', '"', text.text)
+                        text.text = re.sub(r'”', '"', text.text)
+                        text.text = text.text
+
+        # Save the modified Word document
+        doc.save(word_file)
     
     def change_image_locations(self, html_file, new_folder_name):
 
         # Read the HTML file
         with open(html_file, 'r') as file:
             html_data = file.read()
+            
+        # Replace all occurrences of ',' with '
+        html_data = re.sub("‘", "'",html_data)
+        html_data = re.sub("’", "'",html_data)
+        html_data = re.sub("â€˜", "'",html_data)
+        html_data = re.sub("â€™", "'",html_data)
 
         # Parse the HTML using BeautifulSoup
         soup = BeautifulSoup(html_data, 'html.parser')
@@ -285,6 +317,7 @@ class Ui_MainWindow(object):
         files, _ = QFileDialog.getOpenFileName(None, "Open File", "", "Microsoft Word Documents (*.docx)")
         self.attachment_tem_file_path = str(files)
         print(self.attachment_tem_file_path)
+        self.replace_curly_single_quote(self.attachment_tem_file_path)
         archive = zipfile.ZipFile(self.attachment_tem_file_path)
         for file in archive.filelist:
             # print("inside file")
