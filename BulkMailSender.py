@@ -254,30 +254,6 @@ class Ui_MainWindow(object):
         else:
             self.Pop_up_message("System Not Suported")
             
-    def replace_curly_single_quote(self,word_file):
-    # Load the Word document
-        doc = Document(word_file)
-
-        # Create a new document for the modified content
-        modified_doc = Document()
-
-        # Iterate over paragraphs and runs to replace the curly single quote
-        for element in doc.element.body:
-            if element.tag.endswith(('p', 'tbl')):
-                new_element = copy.deepcopy(element)
-                modified_doc.element.body.append(new_element)
-                for run in new_element.iter('w:r'):
-                    for text in run.iter('w:t'):
-                    # Replace curly single quote with regular single quote
-                        text.text = re.sub(r'’', "'", text.text)
-                        text.text = re.sub(r'‘', "'", text.text)
-                        text.text = re.sub(r'“', '"', text.text)
-                        text.text = re.sub(r'”', '"', text.text)
-                        text.text = text.text
-
-        # Save the modified Word document
-        doc.save(word_file)
-    
     def change_image_locations(self, html_file, new_folder_name):
 
         # Read the HTML file
@@ -317,7 +293,6 @@ class Ui_MainWindow(object):
         files, _ = QFileDialog.getOpenFileName(None, "Open File", "", "Microsoft Word Documents (*.docx)")
         self.attachment_tem_file_path = str(files)
         print(self.attachment_tem_file_path)
-        self.replace_curly_single_quote(self.attachment_tem_file_path)
         archive = zipfile.ZipFile(self.attachment_tem_file_path)
         for file in archive.filelist:
             # print("inside file")
