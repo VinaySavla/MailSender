@@ -754,7 +754,14 @@ def merge_pdfs_in_directory(directory, region):
     
 if __name__ == "__main__":
     import sys
-    filename = "pandoc-3.1.2-windows-x86_64.msi"
+
+    if sys.platform == "win32":
+        filename = "pandoc-3.1.2-windows-x86_64.msi"
+    elif sys.platform == "darwin":
+        filename = "pandoc-3.1.2-osx-x86_64.tar.gz"
+    else:
+        self.Pop_up_message("System Not Suported")
+        
     filepath = os.path.join(os.path.dirname(os.path.abspath(__file__)), filename)
 
     if os.path.exists(filepath):
