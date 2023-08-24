@@ -36,7 +36,7 @@ from docx.oxml.ns import nsdecls
 from docx.oxml import parse_xml
 
 class Ui_MainWindow(object):
-    def setupUi(self, MainWindow,btn_val,gb_val,title_name,mail_subject,mail_body,all_text_color,send_button_text_color,wait_time,main_window_title,main_icon):
+    def setupUi(self, MainWindow,btn_val,gb_val,title_name,mail_subject,mail_body,all_text_color,send_button_text_color,wait_time,main_window_title,main_icon,sendMailBool):
         self.mail_body = mail_body
         self.mail_subject= mail_subject
         self.all_text_color_val=all_text_color
@@ -46,6 +46,7 @@ class Ui_MainWindow(object):
         self.wait_time = wait_time
         self.background_color_value = gb_val
         self.background_color = "background-color: rgb%s;"%(self.background_color_value)
+        self.sendMailBool = sendMailBool
 
 
         self.button_color_value = btn_val
@@ -519,6 +520,18 @@ class Ui_MainWindow(object):
                     mail_all_body_text = mail_all_body_text.replace(key, dic[key])
                     subject_text = subject_text.replace(key, dic[key])
                     # print(key,", ", dic[key])
+        
+        # Replace variables in tables
+        for table in sample_page.tables:
+            for row in table.rows:
+                for cell in row.cells:
+                    for paragraph in cell.paragraphs:
+                        for i in range(len(paragraph.runs)):
+                            text = paragraph.runs[i].text
+                            for key in dic:
+                                if str(key).upper() in str(text).upper():
+                                    text = text.replace(key, dic[key])
+                                    paragraph.runs[i].text = text
 
         return sample_page, mail_all_body_text, subject_text
     #end       
@@ -701,12 +714,15 @@ class Ui_MainWindow(object):
                 # convert(self.output_folder_path+"//"+fn+"_"+str(i+2)+".docx", filename)
                 # print("pdf generation done")
 
-                self.sendMail_new(filename,send_to,self.body_tem_file_path,mail_msg,subject_msg)
+                if (self.sendMailBool == 'true'):
+                    self.sendMail_new(filename,send_to,self.body_tem_file_path,mail_msg,subject_msg)
 
-                print("Mail sent: "+email)        
-                print("waiting "+self.wait_time +" seconds")
-                time.sleep(int(self.wait_time))
-                email = ''
+                    print("Mail sent: "+email)        
+                    print("waiting "+self.wait_time +" seconds")
+                    time.sleep(int(self.wait_time))
+                    email = ''
+                else:
+                    print("PDF generated ")
                 print("************************ Cycle Completed.************************")
 
             except Exception as e:
@@ -802,6 +818,9 @@ if __name__ == "__main__":
 
     main_icon=lines[12].strip()
     main_icon=main_icon.split("=")[1]
+    
+    sendMailBool=lines[13].strip()
+    sendMailBool=sendMailBool.split("=")[1]
 
     wait_time_in_sec=lines[8].strip()
     wait_time_in_sec=wait_time_in_sec.split("=")[1]
@@ -809,6 +828,6 @@ if __name__ == "__main__":
     myLabel.setAutoFillBackground(True) # This is important!!
     
 
-    ui.setupUi(MainWindow,btn_color_set,bg_color_set,title_name,mail_subject,mail_body,all_text_color,send_button_text_color,wait_time_in_sec,main_window_title,main_icon)
+    ui.setupUi(MainWindow,btn_color_set,bg_color_set,title_name,mail_subject,mail_body,all_text_color,send_button_text_color,wait_time_in_sec,main_window_title,main_icon,sendMailBool)
     MainWindow.show()
     sys.exit(app.exec())
